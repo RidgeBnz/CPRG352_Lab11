@@ -16,13 +16,10 @@ public class AccountService {
             User user = userDB.get(email);
             if (password.equals(user.getPassword())) {
                 Logger.getLogger(AccountService.class.getName()).log(Level.INFO, "Successful login by {0}", email);
-                
-                /*
+
                 String body = "Successful login by " + user.getFirstName() + " on " + (new java.util.Date()).toString();
                 GmailService.sendMail(email, "Successful Login", body, false);
-                */
-                
-                /*
+                            
                 String to = user.getEmail();
                 String subject = "Notes App Login";
                 String template = path + "/emailtemplates/login.html";
@@ -33,12 +30,41 @@ public class AccountService {
                 tags.put("date", (new java.util.Date()).toString());
                 
                 GmailService.sendMail(to, subject, template, tags);
-                */
+              
                 return user;
             }
         } catch (Exception e) {
         }
-        
         return null;
+    }
+    
+    
+    public boolean forgotPassword(String email,String path) {
+        boolean successfulEmail = false;
+        UserDB userDB = new UserDB();
+        User user = userDB.get(email);
+        
+        if (user == null) {
+            return successfulEmail;
+        }
+        else {
+            String to = email;
+            String subject = "Notes App forgot password";
+            String template = path + "/emailtemplates/forgotPassword.html";
+            
+            HashMap<String, String> tags = new HashMap<>();
+                tags.put("firstname", user.getFirstName());
+                tags.put("lastname", user.getLastName());
+                tags.put("email", email);
+                tags.put("password", user.getPassword());
+            try {
+                GmailService.sendMail(to, subject, template, tags);
+            } 
+            catch (Exception ex) {
+                Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            successfulEmail = true;
+            return successfulEmail;
+        }
     }
 }
