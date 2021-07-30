@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import services.AccountService;
 
 /**
  *
@@ -26,6 +27,14 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String path = getServletContext().getRealPath("/WEB-INF");
+        String email = request.getParameter("email");
         
+        AccountService ac = new AccountService();
+        ac.forgotPassword(email, path);
+        
+        String message = "If the email entered is valid you will recieve an email soon";
+        request.setAttribute("message",message);
+        getServletContext().getRequestDispatcher("/WEB-INF/forgot.jsp").forward(request, response);
     }
 }

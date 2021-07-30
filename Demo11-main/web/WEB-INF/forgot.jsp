@@ -19,6 +19,6 @@
         <input type="text" name="email">
         <input type="submit" value="Submit"></input>
         </form>
-        ${message}
+        <p>${message}</p>
     </body>
 </html>
